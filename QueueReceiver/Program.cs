@@ -7,10 +7,10 @@ namespace QueueReceiver
     class Program
     {
         static string connectionString = "Endpoint=sb://nsdssmydemoservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vEolqxkly+SUazqMAriu62qr/rQQKuBB8IpoZeEXp0g=";
-        static string queueName = "demosession-queue";
+        static string queueName = "demo-queue";
         static ServiceBusClient client;
-        static ServiceBusSessionProcessor processor;
-        static async Task MessageHandler(ProcessSessionMessageEventArgs args)
+        static ServiceBusProcessor processor;
+        static async Task MessageHandler(ProcessMessageEventArgs args)
         {
             string body = args.Message.Body.ToString();
             Console.WriteLine($"Received: {body}, Count: {args.Message.DeliveryCount}");
@@ -24,11 +24,10 @@ namespace QueueReceiver
         static async Task Main()
         {
             client = new ServiceBusClient(connectionString);
-            processor = client.CreateSessionProcessor(queueName, new ServiceBusSessionProcessorOptions()
+            processor = client.CreateProcessor(queueName, new ServiceBusProcessorOptions()
             {
                 ReceiveMode = ServiceBusReceiveMode.PeekLock,
-                AutoCompleteMessages = false,
-                SessionIds = { "s1" }
+                AutoCompleteMessages = false
             });
             processor.ProcessMessageAsync += MessageHandler;
             processor.ProcessErrorAsync += ErrorHandler;
