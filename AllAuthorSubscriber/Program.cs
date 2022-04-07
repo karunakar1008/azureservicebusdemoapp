@@ -6,14 +6,15 @@ namespace AllAuthorSubscriber
 {
     class Program
     {
-        static string connectionString = "Endpoint=sb://csnapps.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=oablfx3KxFgeGIxgrz7o7ehDBCircddQUF0igrWvrxQ=";
+        static string connectionString = "Endpoint=sb://nsdssmydemoservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vEolqxkly+SUazqMAriu62qr/rQQKuBB8IpoZeEXp0g=";
         static string topicName = "books";
-        static string subscriptionName = "allbooks"; //AllSubscription or SandeepSubscription
+        static string subscriptionName = "AllAuthors"; //AllSubscription or SandeepSubscription
         static ServiceBusClient client;
         static ServiceBusProcessor processor;
         static async Task MessageHandler(ProcessMessageEventArgs args)
         {
             string body = args.Message.Body.ToString();
+            Console.WriteLine($"Delivery count:{args.Message.DeliveryCount}");
             Console.WriteLine($"Received: {body} from subscription: {subscriptionName}");
             await args.CompleteMessageAsync(args.Message);
         }

@@ -6,8 +6,10 @@ namespace TopicSender
 {
     class Program
     {
-        static string connectionString = "Endpoint=sb://csnapps.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=oablfx3KxFgeGIxgrz7o7ehDBCircddQUF0igrWvrxQ=";
+        static string connectionString = "Endpoint=sb://nsdssmydemoservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vEolqxkly+SUazqMAriu62qr/rQQKuBB8IpoZeEXp0g=";
         static string topicName = "books";
+
+
         static ServiceBusClient client;
         static ServiceBusSender sender;
         static async Task Main()
@@ -24,6 +26,7 @@ namespace TopicSender
                 Console.WriteLine("Enter Author of message: ");
                 string author = Console.ReadLine();
                 msg.ApplicationProperties.Add("Author", author);
+
                 msg.MessageId = msg.GetHashCode().ToString();
                 await sender.SendMessageAsync(msg);
                 Console.WriteLine("Sent...");

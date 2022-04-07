@@ -6,8 +6,8 @@ namespace QueueSender
 {
     class Program
     {
-        static string connectionString = "Endpoint=sb://csnapps.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=oablfx3KxFgeGIxgrz7o7ehDBCircddQUF0igrWvrxQ=";
-        static string queueName = "dssdemoqueue";
+        static string connectionString = "Endpoint=sb://nsdssmydemoservicebus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=vEolqxkly+SUazqMAriu62qr/rQQKuBB8IpoZeEXp0g=";
+        static string queueName = "demosession-queue";
         static async Task Main()
         {
             ServiceBusClient client = new ServiceBusClient(connectionString);
@@ -17,15 +17,18 @@ namespace QueueSender
             {
                 Console.WriteLine("Enter Message (exit to terminate): ");
                 string m = Console.ReadLine();
+                Console.WriteLine("Enter session id:");
+                string sessionId = Console.ReadLine();
                 if (m == "exit")
                     break;
                 var msg = new ServiceBusMessage(m);
+                msg.SessionId = sessionId;
                 msg.ApplicationProperties.Add("Author", "sandeep");
                 msg.ApplicationProperties.Add("CreatedAt", DateTime.Now);
                 msg.ApplicationProperties.Add("Source", "DemoApp");
 
-                //msg.TimeToLive = new TimeSpan(0, 0, 5);
-                msg.MessageId = msg.GetHashCode().ToString();
+                //msg.TimeToLive = new TimeSpan(0, 0, 10);
+                msg.MessageId = m;
                 await sender.SendMessageAsync(msg);
                 Console.WriteLine("Sent...");
             }
